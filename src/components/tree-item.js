@@ -26,10 +26,8 @@ customElements.define('tree-item', class extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.open = true;
+    this.open = false;
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-
-    let style = document.createElement("style");
 
     const slotToHide = this.shadowRoot.querySelector('slot');
     const prevDisplay = slotToHide.style.display;
@@ -37,10 +35,12 @@ customElements.define('tree-item', class extends HTMLElement {
     const span = this.shadowRoot.querySelector('span');
     span.textContent = this.shadowRoot.querySelector('slot').assignedNodes()[0].textContent;
     const prevDisplaySpan = span.style.display;
-    span.style.display = 'none';
     if (this.shadowRoot.querySelector('slot').assignedNodes().length == 1) {
       button.style.display = 'none';
     }
+    slotToHide.style.display = 'none';
+    button.textContent = '>';
+
     button.addEventListener('click', () => {
       if (this.open) {
         slotToHide.style.display = 'none';

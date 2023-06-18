@@ -21,6 +21,17 @@ class MyProduct extends LitElement {
     this.maxstars = 0;
   }
 
+  firstUpdated() {
+    const textElement = this.shadowRoot.querySelector('.product-name');
+    textElement.addEventListener('mouseover', () => {
+      textElement.title = textElement.textContent;
+    });
+    this.discountPrice = Math.floor(this.price - (this.price * this.discount / 100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    this.price = this.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+
+
   static styles = css`
   .product {
     width: 300px;
@@ -28,17 +39,22 @@ class MyProduct extends LitElement {
     padding: 10px;
     text-align: center;
     border-radius: 10px;
+    cursor: default;
   }
-  
+
   .product img {
-    width: 200px;
-    height: auto;
+    height: 200px;
+    width: auto;
     margin-bottom: 10px;
+  
   }
   
   .product-name {
     font-size: 18px;
     margin-bottom: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   
   .product-price, .product-discount {
@@ -67,11 +83,24 @@ class MyProduct extends LitElement {
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
   }
+  .product-price-with-discount{
+    text-decoration: line-through;
+    font-weight: normal;
+  }
   .product-name{
     font-size: 20px;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
-  }`;
+  }
+  .price-container{
+    height:100px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  `;
 
   render() {
     return html`
@@ -81,7 +110,10 @@ class MyProduct extends LitElement {
         ${this.discount ? html`<p class="product-discount">Descuento: ${this.discount}%</p>`: ''}
       </div>
         <h3 class="product-name">${this.name}</h3>
-        <p class="product-price">$${this.price}</p>
+        <div class="price-container">
+        ${this.discount ? html`<span class="product-price">$${this.discountPrice}</span>`: ''}
+        <span class="product-price ${this.discount ? "product-price-with-discount" : ""}">$${this.price}</span>
+        </div>
         <div class="product-rating">
           ${"✭".repeat(this.stars)+"✩".repeat(this.maxstars - this.stars)}
         </div>
@@ -89,4 +121,5 @@ class MyProduct extends LitElement {
     `;
   }
 }
-customElements.define('product-component', MyProduct);
+
+customElements.define('product-item', MyProduct);
