@@ -1,7 +1,7 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
 
-class MyProduct extends LitElement {
-
+class Product extends LitElement {
+  
   static properties = {
     name: {type: String},
     price: {type: Number},
@@ -122,4 +122,4 @@ class MyProduct extends LitElement {
   }
 }
 
-customElements.define('product-item', MyProduct);
+customElements.define('product-item', Product);
